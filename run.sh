@@ -181,8 +181,8 @@ fi
 if [ ! -z "$MASQUERADED_DOMAINS" ]; then
         echo -en "‣ $notice Setting up address masquerading: $MASQUERADED_DOMAINS"
         postconf -e "masquerade_domains = $MASQUERADED_DOMAINS"
+        postconf -e "local_header_rewrite_clients = static:all"
 fi
-
 
 # Use 587 (submission)
 sed -i -r -e 's/^#submission/submission/' /etc/postfix/master.cf
