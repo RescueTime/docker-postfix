@@ -39,6 +39,7 @@ $RELAYHOST_USERNAME = An (optional) username for the relay server
 $RELAYHOST_PASSWORD = An (optional) login password for the relay server
 $MYNETWORKS = allow domains from per Network ( default 127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16 )
 $ALLOWED_SENDER_DOMAINS = domains sender domains
+$MASQUERADED_DOMAINS = domains where you want to masquerade internal hosts
 ```
 ### `HOSTNAME`
 
@@ -120,6 +121,15 @@ docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.or
 
 Enable additional debugging for any connection comming from `MYNETWORKS`. Set to a non-empty string (usually "1" or "yes") to
 enable debugging.
+
+### `MASQUERADED_DOMAINS`
+
+If you don't want outbound mails to expose hostnames, you can use this variable to enable Postfix's [address masquerading](http://www.postfix.org/ADDRESS_REWRITING_README.html#masquerade). This can be used to do things like rewrite `lorem@ipsum.example.com` to `lorem@example.com`.
+
+Example:
+```
+docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -e "MASQUERADED_DOMAINS=example.com" -p 1587:587 boky/postfix
+```
 
 ## Extending the image
 

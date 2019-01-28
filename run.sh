@@ -54,8 +54,8 @@ if [ ! -z "$TZ" ]; then
 	TZ_FILE="/usr/share/zoneinfo/$TZ"
 	if [ -f "$TZ_FILE" ]; then
 		echo  -e "‣ $notice Setting container timezone to: ${emphasis}$TZ${reset}"
-		ln -snf "$TZ_FILE" /etc/localtime 
-		echo "$TZ" > /etc/timezone 
+		ln -snf "$TZ_FILE" /etc/localtime
+		echo "$TZ" > /etc/timezone
 	else
 		echo  -e "‣ $warn Cannot set timezone to: ${emphasis}$TZ${reset} -- this timezone does not exist."
 	fi
@@ -149,7 +149,7 @@ postconf -e "mynetworks=$MYNETWORKS"
 if [ ! -z "$INBOUND_DEBUGGING" ]; then
 	echo  -e "‣ $notice Enabling additional debbuging for: ${emphasis}$MYNETWORKS${reset}"
 	postconf -e "debug_peer_list=$MYNETWORKS"
-fi 
+fi
 
 # Split with space
 if [ ! -z "$ALLOWED_SENDER_DOMAINS" ]; then
@@ -176,6 +176,11 @@ if [ ! -z "$ALLOWED_SENDER_DOMAINS" ]; then
 else
 	echo -e "ERROR: You need to specify sender domains otherwise Postfix will not run!"
 	exit 1
+fi
+
+if [ ! -z "$MASQUERADED_DOMAINS" ]; then
+        echo -en "‣ $notice Setting up address masquerading: $MASQUERADED_DOMAINS"
+        postconf -e "masquerade_domains = $MASQUERADED_DOMAINS"
 fi
 
 
